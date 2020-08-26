@@ -2,11 +2,10 @@ pipeline {
 environment {
 registry = "testingmanoj/manoj"
 registryCredential = 'testingmanoj'
-dockerImage = ''
+dockerImage = 'aaaaa'
 }
 agent any
 stages {
-}
 stage('Building our image') {
 steps{
 script {
