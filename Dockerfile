@@ -1,8 +1,22 @@
 FROM openjdk:8
-RUN curl -fsSLO https://get.docker.com/builds/Linux/x86_64/docker-17.04.0-ce.tgz \
-  && tar xzvf docker-17.04.0-ce.tgz \
-  && mv docker/docker /usr/local/bin \
-  && rm -r docker docker-17.04.0-ce.tgz
+USER root
+RUN apt-get update && \
+apt-get -y install apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg2 \
+    software-properties-common && \
+curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; 
+echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
+add-apt-repository \
+    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
+    $(lsb_release -cs) \
+    stable" && \
+apt-get update && \
+apt-get -y install docker-ce
+RUN apt-get install -y docker-ce
+RUN usermod -a -G docker jenkins
+USER jenkins
 EXPOSE 8080
 ADD target/spring-boot-docker.jar spring-boot-docker.jar
 ENTRYPOINT ["java","-jar","spring-boot-docker.jar"]
