@@ -43,4 +43,8 @@ public class AuthenticationController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+    @RequestMapping(value = "test", method = RequestMethod.GET)
+    public ResponseEntity<?> testUser(){
+        return ResponseEntity.ok("hello");
+    }
 }
